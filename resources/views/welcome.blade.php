@@ -37,7 +37,7 @@
             </button>
         </div>
     </nav>
-    sdfsd
+    
     <!-- Hero Section -->
     <section class="hero min-h-screen d-flex align-items-center text-white">
         <div class="container text-center overlay py-5">
