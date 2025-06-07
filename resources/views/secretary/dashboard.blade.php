@@ -12,7 +12,7 @@
                     @php
                   // uray haan mo usaren atuy inlene nukuan jay web routes ka agquerry
                     //$baptismalRecords = DB::table('baptismal_records')->get();
-                    
+
                     @endphp
 
                    <div class="p-6 overflow-auto">
@@ -53,7 +53,7 @@
                                             <td class="px-3 py-2 border">{{ $record->Page_Number }}</td>
                                             <td class="px-3 py-2 border">{{ $record->Line_Number }}</td>
                                             <td class="px-3 py-2 border">
-                                                <a href="{{ route('baptismal.show', $record->id) }}" class="text-blue-600 hover:underline">View</a>
+                                                {{-- <a href="{{ route('baptismal.show', $record->id) }}" class="text-blue-600 hover:underline">View</a> --}}
                                             </td>
                                         </tr>
                                     @endforeach

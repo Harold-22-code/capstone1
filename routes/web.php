@@ -18,7 +18,7 @@ use App\Models\BaptismalRecord;
 |
 */
 
-// route for the landing page 
+// route for the landing page
 Route::get('/', function () {
     return view('welcome');
 });
@@ -27,7 +27,7 @@ Route::get('/baptismal', [BaptismalRecordController::class, 'index'])->name('bap
 
 
 
-// redirects to specific dashboard based on the role of the user 
+// redirects to specific dashboard based on the role of the user
 Route::get('/dashboard', function () {
     if(Auth::user()->roles[0]->name == "parish_priest")
     {
@@ -42,7 +42,7 @@ Route::get('/dashboard', function () {
         $baptismalRecords = BaptismalRecord::all();
         //dd($baptismalRecords);
         return view('secretary.dashboard', compact('baptismalRecords'));
-    } 
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
@@ -55,23 +55,26 @@ Route::middleware('auth')->group(function () {
 
 
 
-// admin routes here 
+// admin routes here
 Route::namespace('App\Http\Controllers\Admin')->prefix('admin')->name('admin.')->middleware('can:admin-access')->group(function(){
 
-    // add routes here for admin 
+    // add routes here for admin
     Route::resource('/users','UserController',['except' => ['create','store','destroy']]);
     Route::get('/userfeedbacks','UserController@userfeedback')->name('userfeedback');
-   
+
 });
 
 
 
 
-// users routes here 
-Route::namespace('App\Http\Controllers\Users')->prefix('users')->name('users.')->middleware('can:user-access')->group(function(){
+// users routes here
+Route::namespace('App\Http\Controllers\Users')->prefix('users')->name('users.')->middleware('can:secretary-access')->group(function(){
 
-    // add routes here for users 
-    Route::resource('/feedback','CTRLFeedbacks',['except' => ['update','edit','destroy']]);
+   Route::get('/add-baptism-record', 'AddRecordController@baptismalform')->name('add-baptism-record');
+
+   Route::get('/add-wedding-record', 'AddRecordController@weddingform')->name('add-wedding-record');
+
+   Route::post('/save-baptism-record', 'AddRecordController@SaveBapRecord')->name('save-baptism-record');
 
 });
 
