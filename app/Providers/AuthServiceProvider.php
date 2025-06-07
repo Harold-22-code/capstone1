@@ -24,16 +24,17 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('parish_priest-access',function($user){
+        Gate::define('parish_priest-access', function ($user) {
             return $user->hasRole('parish_priest');
-        });      
+        });
 
-        
-        Gate::define('secretary-access',function($user){
+        Gate::define('secretary-access', function ($user) {
             return $user->hasRole('secretary');
-        });      
+        });
 
-
+        Gate::define('user-access', function ($user) {
+            return $user->hasRole('user'); // change 'user' if your role name is different
+        });
 
     }
 }

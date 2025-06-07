@@ -29,11 +29,11 @@
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <x-dropdown-link>
-                                {{ __('Baptism') }}
+                            <x-dropdown-link href="{{ route('users.add-baptism-record') }}">
+                                {{ __('Baptismal Record') }}
                             </x-dropdown-link>
-                            <x-dropdown-link>
-                                {{ __('Wedding') }}
+                            <x-dropdown-link href="{{ route('users.add-wedding-record') }}">
+                                {{ __('Marriage Record') }}
                             </x-dropdown-link>
                             <x-dropdown-link>
                                 {{ __('Burial') }}
@@ -41,9 +41,9 @@
                         </x-slot>
                     </x-dropdown>
 
-                    <x-nav-link :href="route('users.feedback.create')" >
+                    {{-- <x-nav-link :href="route('users.feedback.create')" >
                         {{ __('Send Feedback') }}
-                    </x-nav-link>
+                    </x-nav-link> --}}
                 </div>
             </div>
 
