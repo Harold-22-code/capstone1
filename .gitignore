@@ -17,3 +17,19 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+package-lock.json
+yarn.lock
+# Ignore all log files
+*.log
+# Ignore all coverage reports
+coverage/
+# Ignore all temporary files
+*.tmp
+# Ignore all backup files
+*.bak
+# Ignore all compiled files
+*.compiled
+# Ignore all cache files
+*.cache
+# Ignore all temporary directories
+tmp/
