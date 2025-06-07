@@ -42,10 +42,24 @@ class AddRecordController extends Controller
         return redirect()->back()->with('success', 'Baptismal record saved successfully!');
     }
 
-    public function weddingform()
+    public function SaveWedRecord(request $request)
     {
+        // Validate the request data
+        //makibaliw pay ti validation rules based on your form fields
+        $validated = $request->validate([
+            'groom_name' => 'required|string|max:255',
+            'bride_name' => 'required|string|max:255',
+            'wedding_date' => 'required|date',
+            'church_name' => 'required|string|max:255',
+            'priest_name' => 'required|string|max:255',
+            // Add other fields as necessary
+        ]);
 
-        return view('secretary.wedding.wedding-form');
+        // Save the record
+        \App\Models\WeddingRecord::create($validated);
+
+        return redirect()->back()->with('success', 'Wedding record saved successfully!');
+
     }
 
     /**
