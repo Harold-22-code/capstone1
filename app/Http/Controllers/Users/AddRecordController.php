@@ -42,6 +42,11 @@ class AddRecordController extends Controller
         return redirect()->back()->with('success', 'Baptismal record saved successfully!');
     }
 
+    public function weddingform()
+    {
+        return view('secretary.wedding.wedding-form');
+    }
+
     public function SaveWedRecord(request $request)
     {
         // Validate the request data
