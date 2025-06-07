@@ -2,15 +2,15 @@
 @extends('layouts.Users.app')
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg shadow">
-            <div class="p-6 text-gray-900 text-xl font-semibold border-b mb-4">
-                {{ __('Add Wedding Record') }}
+<div class="py-8 min-h-screen bg-gray-50">
+    <div class="w-full max-w-4xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-lg rounded-xl p-4 sm:p-6 md:p-8">
+            <div class="text-gray-900 text-xl sm:text-2xl font-bold border-b pb-4 mb-6 flex items-center gap-2">
+                <span>{{ __('Add Wedding Record') }}</span>
             </div>
-            <form action="" method="POST" class="p-6 space-y-4">
+            <form action="{{ route('users.save-wedding-record') }}" method="POST" class="space-y-6">
                 @csrf
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                     <div>
                         <label class="block font-medium mb-1">Year</label>
                         <input type="number" name="year" class="form-input w-full" required>
@@ -76,8 +76,8 @@
                         <input type="text" name="presider" class="form-input w-full" required>
                     </div>
                 </div>
-                <div class="pt-4">
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Submit</button>
+                <div class="pt-6 flex flex-col sm:flex-row justify-end gap-2">
+                    <button type="submit" class="bg-blue-600 text-white px-8 py-2 rounded-lg shadow hover:bg-blue-700 transition w-full sm:w-auto">Submit</button>
                 </div>
             </form>
         </div>
