@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('build/bootstrap/bootstrap.v5.3.2.min.css') }}">
 
     <!-- Tailwind (via Vite) -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         .hero {
