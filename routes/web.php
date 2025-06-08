@@ -40,6 +40,8 @@ Route::get('/dashboard', function () {
 
         //dtuy mabalin ka ag query
         $baptismalRecords = BaptismalRecord::all();
+
+
         //dd($baptismalRecords);
         return view('secretary.dashboard', compact('baptismalRecords'));
     }
@@ -75,6 +77,12 @@ Route::namespace('App\Http\Controllers\Users')->prefix('users')->name('users.')-
    Route::get('/add-wedding-record', 'AddRecordController@weddingform')->name('add-wedding-record');
 
    Route::post('/save-baptism-record', 'AddRecordController@SaveBapRecord')->name('save-baptism-record');
+
+   Route::post('/save-wedding-record', 'AddRecordController@SaveWedRecord')->name('save-wedding-record');
+
+   Route::post('/update-baptism-record/{id}', 'AddRecordController@updateBapRecord')->name('update-baptism-record');
+
+   Route::post('/update-wedding-record/{id}', 'AddRecordController@updateWedRecord')->name('update-wedding-record');
 
 });
 
