@@ -127,6 +127,59 @@ class AddRecordController extends Controller
         return response()->json(['success' => true, 'message' => 'Wedding record updated successfully!', 'record' => $record]);
     }
 
+
+    public function AddBurialRec(Request $request)
+    {
+        // Validate the request data based on the burial_records schema
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'date_of_death' => 'required|date',
+            'date_of_burial' => 'required|date',
+            'age' => 'nullable|integer',
+            'status' => 'nullable|string|max:255',
+            'informant' => 'nullable|string|max:255',
+            'place' => 'nullable|string|max:255',
+            'presider' => 'nullable|string|max:255',
+        ]);
+
+        // Save the record
+        \App\Models\BurialRecord::create($validated);
+
+        return redirect()->back()->with('success', 'Burial record saved successfully!');
+    }
+    public function burialform()
+    {
+        return view('secretary.burial.burial-form');
+    }
+
+    public function AddConfirmationRec(Request $request)
+    {
+        // Validate the request data based on the confirmation_records schema
+        $validated = $request->validate([
+            'year' => 'required|integer',
+            'date_of_confirmation' => 'required|date',
+            'name' => 'required|string|max:255',
+            'parish_of_baptism' => 'nullable|string|max:255',
+            'province_of_baptism' => 'nullable|string|max:255',
+            'place_of_baptism' => 'nullable|string|max:255',
+            'parents' => 'nullable|string|max:255',
+            'sponsor' => 'nullable|string|max:255',
+            'name_of_minister' => 'nullable|string|max:255',
+        ]);
+
+        // Save the record
+        \App\Models\ConfirmationRecord::create($validated);
+
+        return redirect()->back()->with('success', 'Confirmation record saved successfully!');
+    }
+
+    public function confirmform()
+    {
+        return view('secretary.confirmation.confirm-form');
+    }
+  
+   
+
     /**
      * Show the form for creating a new resource.
      */
@@ -173,5 +226,44 @@ class AddRecordController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function updateBurialRecord(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'date_of_death' => 'required|date',
+            'date_of_burial' => 'required|date',
+            'age' => 'nullable|integer',
+            'status' => 'nullable|string|max:255',
+            'informant' => 'nullable|string|max:255',
+            'place' => 'nullable|string|max:255',
+            'presider' => 'nullable|string|max:255',
+        ]);
+
+        $record = \App\Models\BurialRecord::findOrFail($id);
+        $record->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Burial record updated successfully!', 'record' => $record]);
+    }
+
+    public function updateConfirmationRecord(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'year' => 'required|integer',
+            'date_of_confirmation' => 'required|date',
+            'name' => 'required|string|max:255',
+            'parish_of_baptism' => 'nullable|string|max:255',
+            'province_of_baptism' => 'nullable|string|max:255',
+            'place_of_baptism' => 'nullable|string|max:255',
+            'parents' => 'nullable|string|max:255',
+            'sponsor' => 'nullable|string|max:255',
+            'name_of_minister' => 'nullable|string|max:255',
+        ]);
+
+        $record = \App\Models\ConfirmationRecord::findOrFail($id);
+        $record->update($validated);
+
+        return response()->json(['success' => true, 'message' => 'Confirmation record updated successfully!', 'record' => $record]);
     }
 }
