@@ -18,23 +18,22 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-     
-        // this will remove the record from the table when performing seeder 
-        User::truncate();
+        // this will remove the record from the table when performing seeder
+        User::query()->delete();
         DB::table('role_user')->truncate();
-        
-        // ths will get the roles from the role table 
-        $parish_priestRole = Role::Where('name', 'parish_priest')->first();  
+
+        // ths will get the roles from the role table
+        $parish_priestRole = Role::Where('name', 'parish_priest')->first();
         $secretaryRole = Role::Where('name', 'secretary')->first();
 
-        // this will define the users credentials and adds to the table users 
+        // this will define the users credentials and adds to the table users
         $parish_priest = User::create([
             'name' => 'Admin User',
             'email' => 'admin@mail.com',
             'password' => Hash::make('admin')
         ]);
 
-      
+
 
         $secretary = User::create([
             'name' => 'User',
@@ -42,16 +41,16 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('user')
         ]);
 
-           
 
 
 
 
-        // this will attach the roles to the user account 
+
+        // this will attach the roles to the user account
         $parish_priest->roles()->attach($parish_priestRole);
         $secretary->roles()->attach($secretaryRole);
 
 
-   
+
     }
 }

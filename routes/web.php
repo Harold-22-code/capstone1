@@ -29,13 +29,10 @@ Route::get('/baptismal', [BaptismalRecordController::class, 'index'])->name('bap
 
 // redirects to specific dashboard based on the role of the user
 Route::get('/dashboard', function () {
-    if(Auth::user()->roles[0]->name == "parish_priest")
-    {
-       // return Auth::user()->roles[0]->name;
+    if (Auth::user()->roles[0]->name == "parish_priest") {
+        // return Auth::user()->roles[0]->name;
         return view('parish_priest.dashboard');
-    }
-    else
-    {
+    } else {
         // return Auth::user()->roles[0]->name;
 
         //dtuy mabalin ka ag query
@@ -58,50 +55,57 @@ Route::middleware('auth')->group(function () {
 
 
 // admin routes here
-Route::namespace('App\Http\Controllers\Admin')->prefix('admin')->name('admin.')->middleware('can:admin-access')->group(function(){
+Route::
+        namespace('App\Http\Controllers\Admin')->prefix('admin')->name('admin.')->middleware('can:admin-access')->group(function () {
 
-    // add routes here for admin
-    Route::resource('/users','UserController',['except' => ['create','store','destroy']]);
-    Route::get('/userfeedbacks','UserController@userfeedback')->name('userfeedback');
+            // add routes here for admin
+            Route::resource('/users', 'UserController', ['except' => ['create', 'store', 'destroy']]);
+            Route::get('/userfeedbacks', 'UserController@userfeedback')->name('userfeedback');
 
-});
+        });
 
 
 
 
 // users routes here
-Route::namespace('App\Http\Controllers\Users')->prefix('users')->name('users.')->middleware('can:secretary-access')->group(function(){
+Route::
+        namespace('App\Http\Controllers\Users')->prefix('users')->name('users.')->middleware('can:secretary-access')->group(function () {
 
-   Route::get('/add-baptism-record', 'AddRecordController@baptismalform')->name('add-baptism-record');
+            Route::get('/add-baptism-record', 'AddRecordController@baptismalform')->name('add-baptism-record');
 
-   Route::get('/add-wedding-record', 'AddRecordController@weddingform')->name('add-wedding-record');
+            Route::get('/add-wedding-record', 'AddRecordController@weddingform')->name('add-wedding-record');
 
-   Route::post('/save-baptism-record', 'AddRecordController@SaveBapRecord')->name('save-baptism-record');
+            Route::post('/save-baptism-record', 'AddRecordController@SaveBapRecord')->name('save-baptism-record');
 
-   Route::post('/save-wedding-record', 'AddRecordController@SaveWedRecord')->name('save-wedding-record');
+            Route::post('/save-wedding-record', 'AddRecordController@SaveWedRecord')->name('save-wedding-record');
 
-   Route::post('/update-baptism-record/{id}', 'AddRecordController@updateBapRecord')->name('update-baptism-record');
+            Route::post('/update-baptism-record/{id}', 'AddRecordController@updateBapRecord')->name('update-baptism-record');
 
-   Route::post('/update-wedding-record/{id}', 'AddRecordController@updateWedRecord')->name('update-wedding-record');
+            Route::post('/update-wedding-record/{id}', 'AddRecordController@updateWedRecord')->name('update-wedding-record');
 
-   Route::get('/burial-form', 'AddRecordController@burialform')->name('burial-form');
+            Route::get('/burial-form', 'AddRecordController@burialform')->name('burial-form');
 
-   Route::post('/save-burial-record', 'AddRecordController@AddBurialRec')->name('save-burial-record');
+            Route::post('/save-burial-record', 'AddRecordController@AddBurialRec')->name('save-burial-record');
 
-   Route::post('/update-burial-record/{id}', 'AddRecordController@updateBurialRecord')->name('update-burial-record');
+            Route::post('/update-burial-record/{id}', 'AddRecordController@updateBurialRecord')->name('update-burial-record');
 
-    Route::get('/confirm-form', 'AddRecordController@confirmform')->name('confirm-form');
+            Route::get('/confirm-form', 'AddRecordController@confirmform')->name('confirm-form');
 
-    Route::post('/save-confirm-record', 'AddRecordController@AddConfirmationRec')->name('save-confirm-record');
+            Route::post('/save-confirm-record', 'AddRecordController@AddConfirmationRec')->name('save-confirm-record');
 
-    Route::post('/update-confirm-record/{id}', 'AddRecordController@updateConfirmRecord')->name('update-confirm-record');
+            Route::post('/update-confirm-record/{id}', 'AddRecordController@updateConfirmRecord')->name('update-confirm-record');
 
-    Route::post('/update-confirmation-record/{id}', 'AddRecordController@updateConfirmationRecord')->name('update-confirmation-record');
-});
+            Route::post('/update-confirmation-record/{id}', 'AddRecordController@updateConfirmationRecord')->name('update-confirmation-record');
+
+            Route::get('/schedule-form', 'SchedulerController@SchedulingForm')->name('schedule-form');
+
+            Route::post('/save-schedule', 'SchedulerController@saveSchedule')->name('save-schedule');
+
+        });
 
 
 
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

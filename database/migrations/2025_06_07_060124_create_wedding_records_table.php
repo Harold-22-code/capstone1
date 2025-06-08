@@ -13,22 +13,22 @@ return new class extends Migration
     {
         Schema::create('wedding_records', function (Blueprint $table) {
               $table->id();
-            $table->year('year');
-            $table->date('date_of_marriage');
-            $table->string('husband_name');
-            $table->string('wife_name');
-            $table->string('husband_status');
-            $table->string('wife_status');
-            $table->integer('husband_age');
-            $table->integer('wife_age');
-            $table->string('municipality');
-            $table->string('barangay');
-            $table->string('husband_parents');
-            $table->string('wife_parents');
-            $table->string('sponsor1');
-            $table->string('sponsor2');
-            $table->string('place_of_sponsor');
-            $table->string('presider');
+            $table->year('year')->nullable();
+            $table->date('date_of_marriage')->nullable();
+            $table->string('husband_name')->nullable();
+            $table->string('wife_name')->nullable();
+            $table->string('husband_status')->nullable();
+            $table->string('wife_status')->nullable();
+            $table->integer('husband_age')->nullable();
+            $table->integer('wife_age')->nullable();
+            $table->string('municipality')->nullable();
+            $table->string('barangay')->nullable();
+            $table->string('husband_parents')->nullable();
+            $table->string('wife_parents')->nullable();
+            $table->string('sponsor1')->nullable();
+            $table->string('sponsor2')->nullable();
+            $table->string('place_of_sponsor')->nullable();
+            $table->string('presider')->nullable();
             $table->timestamps();
         });
     }
