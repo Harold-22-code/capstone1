@@ -375,17 +375,304 @@
                             </div>
                         </div>
                         <!-- Burial Records Card -->
-                        <div class="bg-yellow-100 rounded-lg shadow p-4 flex flex-col justify-between min-h-[350px] max-h-[500px] overflow-y-auto">
-                            <div>
-                                <div class="text-lg font-bold text-yellow-800 mb-2">Burial Records</div>
-                                <p class="text-gray-600">No data yet.</p>
+                        <div x-data="{ openBurialModal: false, openBurialEditModal: false, selectedBurial: null }" class="bg-yellow-100 rounded-lg shadow p-4 flex flex-col justify-between min-h-[350px] max-h-[500px] overflow-y-auto">
+                            <div class="text-lg font-bold text-yellow-800 mb-2">Burial Records</div>
+                            <div class="flex-1 overflow-auto">
+                                @php
+                                    $burialRecords = \App\Models\BurialRecord::all();
+                                @endphp
+                                @if($burialRecords->isEmpty())
+                                    <p class="text-gray-600">No burial records found.</p>
+                                @else
+                                    <table class="min-w-full table-auto border border-gray-300 text-xs md:text-sm">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="px-2 py-1 border">Name</th>
+                                                <th class="px-2 py-1 border">Date of Death</th>
+                                                <th class="px-2 py-1 border">Date of Burial</th>
+                                                <th class="px-2 py-1 border">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($burialRecords as $record)
+                                                <tr class="border-t">
+                                                    <td class="px-2 py-1 border">{{ $record->name }}</td>
+                                                    <td class="px-2 py-1 border">{{ \Carbon\Carbon::parse($record->date_of_death)->format('F d, Y') }}</td>
+                                                    <td class="px-2 py-1 border">{{ \Carbon\Carbon::parse($record->date_of_burial)->format('F d, Y') }}</td>
+                                                    <td class="px-2 py-1 border space-x-2">
+                                                        <button @click="selectedBurial = {{ $record->toJson() }}; openBurialModal = true" class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded">View</button>
+                                                        <button @click="selectedBurial = {{ $record->toJson() }}; openBurialEditModal = true" class="bg-yellow-700 hover:bg-yellow-800 text-white px-2 py-1 rounded">Edit</button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <!-- Burial View Modal -->
+                                    <div x-show="openBurialModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 px-2 sm:px-0">
+                                        <div class="relative w-full max-w-md sm:max-w-lg md:max-w-xl">
+                                            <div class="relative bg-white bg-opacity-95 rounded-2xl shadow-2xl p-4 sm:p-8 border border-yellow-200 w-full overflow-y-auto max-h-[90vh]">
+                                                <button @click="openBurialModal = false" class="absolute top-3 right-3 text-yellow-400 hover:text-yellow-700 text-2xl font-bold transition">&times;</button>
+                                                <h2 class="text-xl font-extrabold mb-6 text-yellow-700 text-center tracking-wide">Burial Record Details</h2>
+                                                <template x-if="selectedBurial">
+                                                    <div class="space-y-3 text-base">
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-yellow-900">Name:</span> <span x-text="selectedBurial.name"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-yellow-900">Date of Death:</span> <span x-text="selectedBurial.date_of_death"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-yellow-900">Date of Burial:</span> <span x-text="selectedBurial.date_of_burial"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-yellow-900">Age:</span> <span x-text="selectedBurial.age"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-yellow-900">Status:</span> <span x-text="selectedBurial.status"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-yellow-900">Informant:</span> <span x-text="selectedBurial.informant"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-yellow-900">Place:</span> <span x-text="selectedBurial.place"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-yellow-900">Presider:</span> <span x-text="selectedBurial.presider"></span></div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Burial Edit Modal -->
+                                    <div x-data="{ showBurialSuccess: false, burialSuccessMsg: '' }" x-init="
+                                        $watch('showBurialSuccess', value => {
+                                            if(value) setTimeout(() => showBurialSuccess = false, 4000);
+                                        })
+                                    " class="relative">
+                                        <div x-show="openBurialEditModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 px-2 sm:px-0">
+                                            <div class="relative w-full max-w-md sm:max-w-lg md:max-w-xl">
+                                                <div class="relative bg-white bg-opacity-95 rounded-2xl shadow-2xl p-4 sm:p-8 border border-yellow-200 w-full overflow-y-auto max-h-[90vh]">
+                                                    <button @click="openBurialEditModal = false" class="absolute top-3 right-3 text-yellow-400 hover:text-yellow-700 text-2xl font-bold transition">&times;</button>
+                                                    <h2 class="text-xl font-extrabold mb-6 text-yellow-700 text-center tracking-wide">Edit Burial Record</h2>
+                                                    <template x-if="showBurialSuccess">
+                                                        <div class="mb-4 p-2 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded text-center transition-opacity duration-500" x-text="burialSuccessMsg"></div>
+                                                    </template>
+                                                    <template x-if="selectedBurial">
+                                                        <form class="space-y-3 text-base" @submit.prevent="
+                                                            if(selectedBurial && selectedBurial.id){
+                                                                fetch('/users/update-burial-record/' + selectedBurial.id, {
+                                                                    method: 'POST',
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json',
+                                                                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
+                                                                        'Accept': 'application/json',
+                                                                    },
+                                                                    body: JSON.stringify(selectedBurial)
+                                                                })
+                                                                .then(res => res.json())
+                                                                .then(data => {
+                                                                    if(data.success){
+                                                                        showBurialSuccess = true;
+                                                                        burialSuccessMsg = data.message;
+                                                                        setTimeout(() => {
+                                                                            openBurialEditModal = false;
+                                                                            window.location.reload();
+                                                                        }, 4000);
+                                                                    } else {
+                                                                        alert('Update failed!');
+                                                                    }
+                                                                })
+                                                                .catch(() => alert('Update failed!'));
+                                                            }
+                                                        ">
+                                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-yellow-900 mb-1">Name</label>
+                                                                    <input type="text" x-model="selectedBurial.name" class="form-input rounded border border-yellow-300" />
+                                                                </div>
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-yellow-900 mb-1">Date of Death</label>
+                                                                    <input type="date" x-model="selectedBurial.date_of_death" class="form-input rounded border border-yellow-300" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-yellow-900 mb-1">Date of Burial</label>
+                                                                    <input type="date" x-model="selectedBurial.date_of_burial" class="form-input rounded border border-yellow-300" />
+                                                                </div>
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-yellow-900 mb-1">Age</label>
+                                                                    <input type="number" x-model="selectedBurial.age" class="form-input rounded border border-yellow-300" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-yellow-900 mb-1">Status</label>
+                                                                    <input type="text" x-model="selectedBurial.status" class="form-input rounded border border-yellow-300" />
+                                                                </div>
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-yellow-900 mb-1">Informant</label>
+                                                                    <input type="text" x-model="selectedBurial.informant" class="form-input rounded border border-yellow-300" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-yellow-900 mb-1">Place</label>
+                                                                    <input type="text" x-model="selectedBurial.place" class="form-input rounded border border-yellow-300" />
+                                                                </div>
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-yellow-900 mb-1">Presider</label>
+                                                                    <input type="text" x-model="selectedBurial.presider" class="form-input rounded border border-yellow-300" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex justify-end pt-2">
+                                                                <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg shadow transition">Save Changes</button>
+                                                            </div>
+                                                        </form>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <!-- Confirmation Records Card -->
-                        <div class="bg-purple-100 rounded-lg shadow p-4 flex flex-col justify-between min-h-[350px] max-h-[500px] overflow-y-auto">
-                            <div>
-                                <div class="text-lg font-bold text-purple-800 mb-2">Confirmation Records</div>
-                                <p class="text-gray-600">No data yet.</p>
+                        <div x-data="{ openConfirmModal: false, openConfirmEditModal: false, selectedConfirm: null }" class="bg-purple-100 rounded-lg shadow p-4 flex flex-col justify-between min-h-[350px] max-h-[500px] overflow-y-auto">
+                            <div class="text-lg font-bold text-purple-800 mb-2">Confirmation Records</div>
+                            <div class="flex-1 overflow-auto">
+                                @php
+                                    $confirmationRecords = \App\Models\ConfirmationRecord::all();
+                                @endphp
+                                @if($confirmationRecords->isEmpty())
+                                    <p class="text-gray-600">No confirmation records found.</p>
+                                @else
+                                    <table class="min-w-full table-auto border border-gray-300 text-xs md:text-sm">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="px-2 py-1 border">Name</th>
+                                                <th class="px-2 py-1 border">Date of Confirmation</th>
+                                                <th class="px-2 py-1 border">Year</th>
+                                                <th class="px-2 py-1 border">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($confirmationRecords as $record)
+                                                <tr class="border-t">
+                                                    <td class="px-2 py-1 border">{{ $record->name }}</td>
+                                                    <td class="px-2 py-1 border">{{ \Carbon\Carbon::parse($record->date_of_confirmation)->format('F d, Y') }}</td>
+                                                    <td class="px-2 py-1 border">{{ $record->year }}</td>
+                                                    <td class="px-2 py-1 border space-x-2">
+                                                        <button @click="selectedConfirm = {{ $record->toJson() }}; openConfirmModal = true" class="bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded">View</button>
+                                                        <button @click="selectedConfirm = {{ $record->toJson() }}; openConfirmEditModal = true" class="bg-purple-700 hover:bg-purple-800 text-white px-2 py-1 rounded">Edit</button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <!-- Confirmation View Modal -->
+                                    <div x-show="openConfirmModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 px-2 sm:px-0">
+                                        <div class="relative w-full max-w-md sm:max-w-lg md:max-w-xl">
+                                            <div class="relative bg-white bg-opacity-95 rounded-2xl shadow-2xl p-4 sm:p-8 border border-purple-200 w-full overflow-y-auto max-h-[90vh]">
+                                                <button @click="openConfirmModal = false" class="absolute top-3 right-3 text-purple-400 hover:text-purple-700 text-2xl font-bold transition">&times;</button>
+                                                <h2 class="text-xl font-extrabold mb-6 text-purple-700 text-center tracking-wide">Confirmation Record Details</h2>
+                                                <template x-if="selectedConfirm">
+                                                    <div class="space-y-3 text-base">
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Name:</span> <span x-text="selectedConfirm.name"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Year:</span> <span x-text="selectedConfirm.year"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Date of Confirmation:</span> <span x-text="selectedConfirm.date_of_confirmation"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Parish of Baptism:</span> <span x-text="selectedConfirm.parish_of_baptism"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Province of Baptism:</span> <span x-text="selectedConfirm.province_of_baptism"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Place of Baptism:</span> <span x-text="selectedConfirm.place_of_baptism"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Parents:</span> <span x-text="selectedConfirm.parents"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Sponsor:</span> <span x-text="selectedConfirm.sponsor"></span></div>
+                                                        <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-purple-900">Name of Minister:</span> <span x-text="selectedConfirm.name_of_minister"></span></div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Confirmation Edit Modal -->
+                                    <div x-data="{ showConfirmSuccess: false, confirmSuccessMsg: '' }" x-init="
+                                        $watch('showConfirmSuccess', value => {
+                                            if(value) setTimeout(() => showConfirmSuccess = false, 4000);
+                                        })
+                                    " class="relative">
+                                        <div x-show="openConfirmEditModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 px-2 sm:px-0">
+                                            <div class="relative w-full max-w-md sm:max-w-lg md:max-w-xl">
+                                                <div class="relative bg-white bg-opacity-95 rounded-2xl shadow-2xl p-4 sm:p-8 border border-purple-200 w-full overflow-y-auto max-h-[90vh]">
+                                                    <button @click="openConfirmEditModal = false" class="absolute top-3 right-3 text-purple-400 hover:text-purple-700 text-2xl font-bold transition">&times;</button>
+                                                    <h2 class="text-xl font-extrabold mb-6 text-purple-700 text-center tracking-wide">Edit Confirmation Record</h2>
+                                                    <template x-if="showConfirmSuccess">
+                                                        <div class="mb-4 p-2 bg-purple-100 border border-purple-400 text-purple-800 rounded text-center transition-opacity duration-500" x-text="confirmSuccessMsg"></div>
+                                                    </template>
+                                                    <template x-if="selectedConfirm">
+                                                        <form class="space-y-3 text-base" @submit.prevent="
+                                                            if(selectedConfirm && selectedConfirm.id){
+                                                                fetch('/users/update-confirmation-record/' + selectedConfirm.id, {
+                                                                    method: 'POST',
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json',
+                                                                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
+                                                                        'Accept': 'application/json',
+                                                                    },
+                                                                    body: JSON.stringify(selectedConfirm)
+                                                                })
+                                                                .then(res => res.json())
+                                                                .then(data => {
+                                                                    if(data.success){
+                                                                        showConfirmSuccess = true;
+                                                                        confirmSuccessMsg = data.message;
+                                                                        setTimeout(() => {
+                                                                            openConfirmEditModal = false;
+                                                                            window.location.reload();
+                                                                        }, 4000);
+                                                                    } else {
+                                                                        alert('Update failed!');
+                                                                    }
+                                                                })
+                                                                .catch(() => alert('Update failed!'));
+                                                            }
+                                                        ">
+                                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-purple-900 mb-1">Name</label>
+                                                                    <input type="text" x-model="selectedConfirm.name" class="form-input rounded border border-purple-300" />
+                                                                </div>
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-purple-900 mb-1">Year</label>
+                                                                    <input type="number" x-model="selectedConfirm.year" class="form-input rounded border border-purple-300" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-purple-900 mb-1">Date of Confirmation</label>
+                                                                    <input type="date" x-model="selectedConfirm.date_of_confirmation" class="form-input rounded border border-purple-300" />
+                                                                </div>
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-purple-900 mb-1">Parish of Baptism</label>
+                                                                    <input type="text" x-model="selectedConfirm.parish_of_baptism" class="form-input rounded border border-purple-300" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-purple-900 mb-1">Province of Baptism</label>
+                                                                    <input type="text" x-model="selectedConfirm.province_of_baptism" class="form-input rounded border border-purple-300" />
+                                                                </div>
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-purple-900 mb-1">Place of Baptism</label>
+                                                                    <input type="text" x-model="selectedConfirm.place_of_baptism" class="form-input rounded border border-purple-300" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex flex-col sm:flex-row gap-2">
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-purple-900 mb-1">Parents</label>
+                                                                    <input type="text" x-model="selectedConfirm.parents" class="form-input rounded border border-purple-300" />
+                                                                </div>
+                                                                <div class="flex-1 flex flex-col">
+                                                                    <label class="font-semibold text-purple-900 mb-1">Sponsor</label>
+                                                                    <input type="text" x-model="selectedConfirm.sponsor" class="form-input rounded border border-purple-300" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex flex-col">
+                                                                <label class="font-semibold text-purple-900 mb-1">Name of Minister</label>
+                                                                <input type="text" x-model="selectedConfirm.name_of_minister" class="form-input rounded border border-purple-300" />
+                                                            </div>
+                                                            <div class="flex justify-end pt-2">
+                                                                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg shadow transition">Save Changes</button>
+                                                            </div>
+                                                        </form>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

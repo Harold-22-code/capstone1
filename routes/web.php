@@ -84,7 +84,21 @@ Route::namespace('App\Http\Controllers\Users')->prefix('users')->name('users.')-
 
    Route::post('/update-wedding-record/{id}', 'AddRecordController@updateWedRecord')->name('update-wedding-record');
 
+   Route::get('/burial-form', 'AddRecordController@burialform')->name('burial-form');
+
+   Route::post('/save-burial-record', 'AddRecordController@AddBurialRec')->name('save-burial-record');
+
+   Route::post('/update-burial-record/{id}', 'AddRecordController@updateBurialRecord')->name('update-burial-record');
+
+    Route::get('/confirm-form', 'AddRecordController@confirmform')->name('confirm-form');
+
+    Route::post('/save-confirm-record', 'AddRecordController@AddConfirmationRec')->name('save-confirm-record');
+
+    Route::post('/update-confirm-record/{id}', 'AddRecordController@updateConfirmRecord')->name('update-confirm-record');
+
+    Route::post('/update-confirmation-record/{id}', 'AddRecordController@updateConfirmationRecord')->name('update-confirmation-record');
 });
+
 
 
 

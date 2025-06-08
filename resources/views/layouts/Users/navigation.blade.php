@@ -35,8 +35,11 @@
                             <x-dropdown-link href="{{ route('users.add-wedding-record') }}">
                                 {{ __('Marriage Record') }}
                             </x-dropdown-link>
-                            <x-dropdown-link>
-                                {{ __('Burial') }}
+                            <x-dropdown-link href="{{ route('users.burial-form') }}">
+                                {{ __('Burial Record') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('users.confirm-form') }}">
+                                {{ __('Confirmation Record') }}
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
