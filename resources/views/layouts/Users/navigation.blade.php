@@ -13,8 +13,12 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" >
+                    <x-nav-link :href="route('dashboard')" class="no-underline">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{route('users.schedule-form')}}" class="no-underline">
+                        {{ __('Book Schedule') }}
                     </x-nav-link>
 
                     <x-dropdown align="left" width="48">
@@ -44,9 +48,6 @@
                         </x-slot>
                     </x-dropdown>
 
-                    {{-- <x-nav-link :href="route('users.feedback.create')" >
-                        {{ __('Send Feedback') }}
-                    </x-nav-link> --}}
                 </div>
             </div>
 
@@ -154,3 +155,9 @@
         </div>
     </div>
 </nav>
+
+<style>
+    .no-underline {
+        text-decoration: none !important;
+    }
+</style>

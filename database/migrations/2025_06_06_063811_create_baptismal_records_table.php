@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('baptismal_records', function (Blueprint $table) {
               $table->id();
-        $table->string('name');
-        $table->date('Birth_Date');
-        $table->date('Baptism_Date');
-        $table->string('Fathers_Name');
-        $table->string('Mothers_Name');
-        $table->string('Church_Name');
+        $table->string('name')->nullable();
+        $table->date('Birth_Date')->nullable();
+        $table->date('Baptism_Date')->nullable();
+        $table->string('Fathers_Name')->nullable();
+        $table->string('Mothers_Name')->nullable();
+        $table->string('Church_Name')->nullable();
         $table->string('Sponsor')->nullable();
         $table->string('Secondary_Sponsor')->nullable();
-        $table->string('Priest_Name');
-        $table->integer('Book_Number');
-        $table->integer('Page_Number');
-        $table->integer('Line_Number');
+        $table->string('Priest_Name')->nullable();
+        $table->integer('Book_Number')->nullable();
+        $table->integer('Page_Number')->nullable();
+        $table->integer('Line_Number')->nullable();
         $table->timestamps();
         });
     }
