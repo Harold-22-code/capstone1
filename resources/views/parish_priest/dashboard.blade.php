@@ -1,4 +1,4 @@
-@can('admin-access')
+@can('parish_priest-access')
     @extends('layouts.Admin.app')
 
         @section('content')
@@ -10,9 +10,7 @@
                            
                             
                             <h1>Lists of All reports</h1>
-                            
-                           
-                        
+                 
                         </div>
                     </div>
                 </div>
