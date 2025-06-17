@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BaptismalRecordController;
 use App\Models\BaptismalRecord;
-
+Use App\Models\Schedule;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,16 +30,11 @@ Route::get('/baptismal', [BaptismalRecordController::class, 'index'])->name('bap
 // redirects to specific dashboard based on the role of the user
 Route::get('/dashboard', function () {
     if (Auth::user()->roles[0]->name == "parish_priest") {
-        // return Auth::user()->roles[0]->name;
-        return view('parish_priest.dashboard');
+        // Fetch schedules with event and user relationships, latest first
+        $schedule = Schedule::with('event', 'user')->latest()->get();
+        return view('parish_priest.dashboard')->with(compact('schedule'));
     } else {
-        // return Auth::user()->roles[0]->name;
-
-        //dtuy mabalin ka ag query
         $baptismalRecords = BaptismalRecord::all();
-
-
-        //dd($baptismalRecords);
         return view('secretary.dashboard', compact('baptismalRecords'));
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -56,12 +51,15 @@ Route::middleware('auth')->group(function () {
 
 // admin routes here
 Route::
-        namespace('App\Http\Controllers\Admin')->prefix('admin')->name('admin.')->middleware('can:admin-access')->group(function () {
+        namespace('App\Http\Controllers\Admin')->prefix('admin')->name('admin.')->middleware('can:parish_priest-access')->group(function () {
 
             // add routes here for admin
             Route::resource('/users', 'UserController', ['except' => ['create', 'store', 'destroy']]);
             Route::get('/userfeedbacks', 'UserController@userfeedback')->name('userfeedback');
 
+            Route::get('/schedule-form', 'AdminScheduleController@SchedulingForm')->name('schedule-form');
+
+            Route::post('/save-schedule', 'AdminScheduleController@saveSchedule')->name('save-schedule');
         });
 
 
