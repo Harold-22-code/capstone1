@@ -17,6 +17,10 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
+                    <x-nav-link href="{{route('admin.schedule-form')}}" class="no-underline">
+                        {{ __('Book Schedule') }}
+                    </x-nav-link>
+
 
                     <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
                         {{ __('Users') }}

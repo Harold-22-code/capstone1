@@ -691,7 +691,7 @@
                 </div>
                 <!-- Schedules Card moved outside Records Dashboard -->
                 <div class="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 mt-8">
-                    <div x-data="{ openScheduleModal: false, openScheduleEditModal: false, selectedSchedule: null }" class="bg-white border border-indigo-100 rounded-xl shadow-sm p-4 flex flex-col min-h-[250px]">
+                    <div x-data="{ openScheduleModal: false, openScheduleEditModal: false, selectedSchedule: null, showScheduleSuccess: false, scheduleSuccessMsg: '' }" class="bg-white border border-indigo-100 rounded-xl shadow-sm p-4 flex flex-col min-h-[250px]">
                         <div class="flex items-center mb-2">
                             <span class="text-lg font-semibold text-indigo-700">Schedules</span>
                         </div>
@@ -729,7 +729,94 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <!-- Schedule View Modal (optional, add as needed) -->
+                                <!-- Schedule View Modal -->
+                                <div x-show="openScheduleModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 px-2 sm:px-0">
+                                    <div class="relative w-full max-w-md sm:max-w-lg md:max-w-xl">
+                                        <div class="relative bg-white bg-opacity-95 rounded-2xl shadow-2xl p-4 sm:p-8 border border-indigo-200 w-full overflow-y-auto max-h-[90vh]">
+                                            <button @click="openScheduleModal = false" class="absolute top-3 right-3 text-indigo-400 hover:text-indigo-700 text-2xl font-bold transition">&times;</button>
+                                            <h2 class="text-xl font-extrabold mb-6 text-indigo-700 text-center tracking-wide">Schedule Details</h2>
+                                            <template x-if="selectedSchedule">
+                                                <div class="space-y-3 text-base">
+                                                    <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Event:</span> <span x-text="selectedSchedule.event ? selectedSchedule.event.name : '-' "></span></div>
+                                                    <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Reserved By:</span> <span x-text="selectedSchedule.user ? selectedSchedule.user.name : '-' "></span></div>
+                                                    <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Date:</span> <span x-text="selectedSchedule.reservation_date"></span></div>
+                                                    <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Time:</span> <span x-text="selectedSchedule.reservation_time"></span></div>
+                                                    <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Number of People:</span> <span x-text="selectedSchedule.number_of_people"></span></div>
+                                                    <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Status:</span> <span x-text="selectedSchedule.status"></span></div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Schedule Edit Modal -->
+                                <div x-show="openScheduleEditModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 px-2 sm:px-0">
+                                    <div class="relative w-full max-w-md sm:max-w-lg md:max-w-xl">
+                                        <div class="relative bg-white bg-opacity-95 rounded-2xl shadow-2xl p-4 sm:p-8 border border-yellow-200 w-full overflow-y-auto max-h-[90vh]">
+                                            <button @click="openScheduleEditModal = false" class="absolute top-3 right-3 text-yellow-400 hover:text-yellow-700 text-2xl font-bold transition">&times;</button>
+                                            <h2 class="text-xl font-extrabold mb-6 text-yellow-700 text-center tracking-wide">Edit Schedule</h2>
+                                            <template x-if="showScheduleSuccess">
+                                                <div class="mb-4 p-2 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded text-center transition-opacity duration-500" x-text="scheduleSuccessMsg"></div>
+                                            </template>
+                                            <template x-if="selectedSchedule">
+                                                <form class="space-y-3 text-base" @submit.prevent="
+                                                    if(selectedSchedule && selectedSchedule.id){
+                                                        fetch('/users/update-schedule/' + selectedSchedule.id, {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json',
+                                                                'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
+                                                                'Accept': 'application/json',
+                                                            },
+                                                            body: JSON.stringify(selectedSchedule)
+                                                        })
+                                                        .then(res => res.json())
+                                                        .then data => {
+                                                            if(data.success){
+                                                                showScheduleSuccess = true;
+                                                                scheduleSuccessMsg = data.message;
+                                                                setTimeout(() => {
+                                                                    openScheduleEditModal = false;
+                                                                    window.location.reload();
+                                                                }, 4000);
+                                                            } else {
+                                                                alert('Update failed!');
+                                                            }
+                                                        })
+                                                        .catch(() => alert('Update failed!'));
+                                                    }
+                                                ">
+                                                    <div class="flex flex-col sm:flex-row gap-2">
+                                                        <div class="flex-1 flex flex-col">
+                                                            <label class="font-semibold text-yellow-900 mb-1">Date</label>
+                                                            <input type="date" x-model="selectedSchedule.reservation_date" class="form-input rounded border border-yellow-300" />
+                                                        </div>
+                                                        <div class="flex-1 flex flex-col">
+                                                            <label class="font-semibold text-yellow-900 mb-1">Time</label>
+                                                            <input type="time" x-model="selectedSchedule.reservation_time" class="form-input rounded border border-yellow-300" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex flex-col sm:flex-row gap-2">
+                                                        <div class="flex-1 flex flex-col">
+                                                            <label class="font-semibold text-yellow-900 mb-1">Number of People</label>
+                                                            <input type="number" x-model="selectedSchedule.number_of_people" class="form-input rounded border border-yellow-300" />
+                                                        </div>
+                                                        <div class="flex-1 flex flex-col">
+                                                            <label class="font-semibold text-yellow-900 mb-1">Status</label>
+                                                            <select x-model="selectedSchedule.status" class="form-input rounded border border-yellow-300">
+                                                                <option value="pending">Pending</option>
+                                                                <option value="approved">Approved</option>
+                                                                <option value="rejected">Rejected</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex justify-end pt-2">
+                                                        <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg shadow transition">Save Changes</button>
+                                                    </div>
+                                                </form>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     </div>
