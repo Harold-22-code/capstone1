@@ -29,7 +29,9 @@ Route::get('/baptismal', [BaptismalRecordController::class, 'index'])->name('bap
 
 // redirects to specific dashboard based on the role of the user
 Route::get('/dashboard', function () {
-    if (Auth::user()->roles[0]->name == "parish_priest") {
+    $user = Auth::user();
+    $role = $user->roles->first();
+    if ($role && $role->name == "parish_priest") {
         // Fetch schedules with event and user relationships, latest first
         $schedule = Schedule::with('event', 'user')->latest()->get();
         return view('parish_priest.dashboard')->with(compact('schedule'));
@@ -98,6 +100,8 @@ Route::
             Route::get('/schedule-form', 'SchedulerController@SchedulingForm')->name('schedule-form');
 
             Route::post('/save-schedule', 'SchedulerController@saveSchedule')->name('save-schedule');
+
+            Route::post('/update-schedule/{id}', 'SchedulerController@updateSchedule')->name('update-schedule');
 
         });
 
