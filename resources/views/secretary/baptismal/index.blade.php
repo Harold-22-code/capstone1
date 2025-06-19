@@ -55,7 +55,7 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                     <div>
-                        <label for="Sponsor" class="block font-medium mb-1">Sponsor</label>
+                        <label for="Secondary_Sponsor" class="block font-medium mb-1">Secondary Sponsor</label>
                         <input type="text" name="Sponsor" id="Sponsor" class="form-input w-full">
                     </div>
                     <div>

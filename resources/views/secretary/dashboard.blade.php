@@ -747,7 +747,7 @@
                                             </template>
                                         </div>
                                     </div>
-                                </div>
+                                </div> 
                                 <!-- Schedule Edit Modal -->
                                 <div x-show="openScheduleEditModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 px-2 sm:px-0">
                                     <div class="relative w-full max-w-md sm:max-w-lg md:max-w-xl">
