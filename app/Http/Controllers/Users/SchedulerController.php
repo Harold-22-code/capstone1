@@ -103,6 +103,22 @@ class SchedulerController extends Controller
         return redirect()->route('users.schedule-form')->with('success', 'Schedule saved successfully!');
     }
 
+    public function updateSchedule(Request $request, $id)
+    {
+        $schedule = \App\Models\Schedule::findOrFail($id);
+        $validated = $request->validate([
+            'reservation_date' => 'required|date',
+            'reservation_time' => 'required',
+            'number_of_people' => ['required', 'integer', 'min:1'],
+            'status' => 'required|in:pending,approved,rejected',
+        ]);
+        $schedule->update($validated);
+        return response()->json([
+            'success' => true,
+            'message' => 'Schedule updated successfully!'
+        ]);
+    }
+
     // Helper to get event id by name
     private function getEventIdByName($name)
     {

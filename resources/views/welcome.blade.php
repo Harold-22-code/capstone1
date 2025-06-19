@@ -14,7 +14,7 @@
 
     <style>
         .hero {
-            background: url('{{ asset('images/church-bg.jpg') }}') no-repeat center center;
+            background: url('{{ asset('images/church1-bg.jpg') }}') no-repeat center center;
             background-size: cover;
             min-height: 100vh;
             display: flex;
@@ -28,10 +28,10 @@
     </style>
 </head>
 <body class="bg-light font-sans text-gray-800">
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+   <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">{{ config('app.name', 'San Jacinto Parish') }}</a>
+            <a class="navbar-brand fw-bold" href="#">Managing System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
