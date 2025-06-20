@@ -97,20 +97,31 @@
                                                                         },
                                                                         body: JSON.stringify(selected)
                                                                     })
-                                                                    .then(res => res.json())
-                                                                    .then data => {
-                                                                        if(data.success){
+                                                                    .then(async res => {
+                                                                        if (!res.ok) {
+                                                                            const errorData = await res.json().catch(() => ({}));
+                                                                            console.error('Validation or server error:', errorData);
+                                                                            alert('Update failed! ' + (errorData.message || res.statusText));
+                                                                            return;
+                                                                        }
+                                                                        return res.json();
+                                                                    })
+                                                                    .then(data => {
+                                                                        if(data && data.success){
                                                                             showSuccess = true;
                                                                             successMsg = data.message;
                                                                             setTimeout(() => {
                                                                                 openEditModal = false;
                                                                                 window.location.reload();
-                                                                            }, 4000); // Increased to 4 seconds to match the message duration
-                                                                        } else {
-                                                                            alert('Update failed!');
+                                                                            }, 4000);
+                                                                        } else if(data && data.message) {
+                                                                            alert('Update failed! ' + data.message);
                                                                         }
                                                                     })
-                                                                    .catch(() => alert('Update failed!'));
+                                                                    .catch(error => {
+                                                                        console.error('AJAX error:', error);
+                                                                        alert('Update failed! See console for details.');
+                                                                    });
                                                                 }
                                                             ">
                                                                 <div class="flex flex-col">
@@ -741,7 +752,6 @@
                                                     <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Reserved By:</span> <span x-text="selectedSchedule.user ? selectedSchedule.user.name : '-' "></span></div>
                                                     <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Date:</span> <span x-text="selectedSchedule.reservation_date"></span></div>
                                                     <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Time:</span> <span x-text="selectedSchedule.reservation_time"></span></div>
-                                                    <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Number of People:</span> <span x-text="selectedSchedule.number_of_people"></span></div>
                                                     <div class="flex flex-col sm:flex-row justify-between"><span class="font-semibold text-indigo-900">Status:</span> <span x-text="selectedSchedule.status"></span></div>
                                                 </div>
                                             </template>
@@ -769,20 +779,31 @@
                                                             },
                                                             body: JSON.stringify(selectedSchedule)
                                                         })
-                                                        .then(res => res.json())
-                                                        .then data => {
-                                                            if(data.success){
+                                                        .then(async res => {
+                                                            if (!res.ok) {
+                                                                const errorData = await res.json().catch(() => ({}));
+                                                                console.error('Validation or server error:', errorData);
+                                                                alert('Update failed! ' + (errorData.message || res.statusText));
+                                                                return;
+                                                            }
+                                                            return res.json();
+                                                        })
+                                                        .then(data => {
+                                                            if(data && data.success){
                                                                 showScheduleSuccess = true;
                                                                 scheduleSuccessMsg = data.message;
                                                                 setTimeout(() => {
                                                                     openScheduleEditModal = false;
                                                                     window.location.reload();
                                                                 }, 4000);
-                                                            } else {
-                                                                alert('Update failed!');
+                                                            } else if(data && data.message) {
+                                                                alert('Update failed! ' + data.message);
                                                             }
                                                         })
-                                                        .catch(() => alert('Update failed!'));
+                                                        .catch(error => {
+                                                            console.error('AJAX error:', error);
+                                                            alert('Update failed! See console for details.');
+                                                        });
                                                     }
                                                 ">
                                                     <div class="flex flex-col sm:flex-row gap-2">
@@ -796,10 +817,6 @@
                                                         </div>
                                                     </div>
                                                     <div class="flex flex-col sm:flex-row gap-2">
-                                                        <div class="flex-1 flex flex-col">
-                                                            <label class="font-semibold text-yellow-900 mb-1">Number of People</label>
-                                                            <input type="number" x-model="selectedSchedule.number_of_people" class="form-input rounded border border-yellow-300" />
-                                                        </div>
                                                         <div class="flex-1 flex flex-col">
                                                             <label class="font-semibold text-yellow-900 mb-1">Status</label>
                                                             <select x-model="selectedSchedule.status" class="form-input rounded border border-yellow-300">

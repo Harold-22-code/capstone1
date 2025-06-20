@@ -19,7 +19,6 @@ class AdminScheduleController extends Controller
             'event_id' => 'required|exists:events,id',
             'reservation_date' => 'required|date',
             'reservation_time' => 'required',
-            'number_of_people' => ['required', 'integer', 'min:1'],
             // Additional fields for specific events
             'groom_name' => 'required_if:event_id,' . $this->getEventIdByName('Wedding'),
             'bride_name' => 'required_if:event_id,' . $this->getEventIdByName('Wedding'),
@@ -101,6 +100,21 @@ class AdminScheduleController extends Controller
         ]);
 
         return redirect()->route('admin.schedule-form')->with('success', 'Schedule saved successfully!');
+    }
+
+    public function updateSchedule(Request $request, $id)
+    {
+        $schedule = \App\Models\Schedule::findOrFail($id);
+        $validated = $request->validate([
+            'reservation_date' => 'required|date',
+            'reservation_time' => 'required',
+            'status' => 'required|in:pending,approved,rejected',
+        ]);
+        $schedule->update($validated);
+        return response()->json([
+            'success' => true,
+            'message' => 'Schedule updated successfully!'
+        ]);
     }
 
     // Helper to get event id by name

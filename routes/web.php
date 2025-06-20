@@ -101,11 +101,11 @@ Route::
 
             Route::post('/save-schedule', 'SchedulerController@saveSchedule')->name('save-schedule');
 
-            Route::post('/update-schedule/{id}', 'SchedulerController@updateSchedule')->name('update-schedule');
-
         });
 
 
+// Allow both parish priests and secretaries to update schedules
+Route::post('/users/update-schedule/{id}', [App\Http\Controllers\Users\SchedulerController::class, 'updateSchedule'])->name('update-schedule')->middleware(['auth', 'verified']);
 
 
 
