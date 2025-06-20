@@ -19,7 +19,6 @@ class SchedulerController extends Controller
             'event_id' => 'required|exists:events,id',
             'reservation_date' => 'required|date',
             'reservation_time' => 'required',
-            'number_of_people' => ['required', 'integer', 'min:1'],
             // Additional fields for specific events
             'groom_name' => 'required_if:event_id,' . $this->getEventIdByName('Wedding'),
             'bride_name' => 'required_if:event_id,' . $this->getEventIdByName('Wedding'),
@@ -109,7 +108,6 @@ class SchedulerController extends Controller
         $validated = $request->validate([
             'reservation_date' => 'required|date',
             'reservation_time' => 'required',
-            'number_of_people' => ['required', 'integer', 'min:1'],
             'status' => 'required|in:pending,approved,rejected',
         ]);
         $schedule->update($validated);

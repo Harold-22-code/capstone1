@@ -34,10 +34,6 @@
                     <label for="reservation_time" class="block text-sm font-medium text-gray-700">Reservation Time</label>
                     <input type="time" id="reservation_time" name="reservation_time" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
-                <div>
-                    <label for="number_of_people" class="block text-sm font-medium text-gray-700">Number of People</label>
-                    <input type="number" id="number_of_people" name="number_of_people" min="1" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                </div>
 
                 <div id="wedding-fields" style="display:none;">
                     <label for="groom_name" class="block text-sm font-medium text-gray-700">Groom Name</label>

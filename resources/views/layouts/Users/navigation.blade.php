@@ -1,27 +1,28 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-200 shadow-sm font-[serif] text-gray-800">
+<nav x-data="{ open: false }" class="bg-red-900 border-b border-gray-200 shadow-sm font-[serif] text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20 items-center">
             <!-- Logo and Title -->
             <div class="flex items-center gap-4">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Church Logo" class="h-12 w-auto rounded-full shadow border border-yellow-400">
-                    <span class="text-2xl text-blue-900 font-semibold tracking-wide">San Jacinto Parish</span>
+               <a href="{{ route('dashboard') }}" class="flex items-center gap-3 no-underline">
+
+                      <img src="{{ asset('images/logo.jpg') }}" alt="Church Logo" class="h-14 w-14 rounded-full border-4 border-yellow-300 shadow-md">
+                    <span class="text-3xl font-bold tracking-wide text-white drop-shadow-lg">San Jacinto De Polonia Parish</span>
                 </a>
             </div>
 
             <!-- Desktop Navigation -->
-            <div class="hidden sm:flex space-x-8 items-center text-sm">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="hover:text-blue-800 transition">
+            <div class="hidden sm:flex space-x-8 items-center text-l">
+                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')"  class="text-white !no-underline transition hover:text-yellow-300 hover:!no-underline">
                     {{ __('Dashboard') }}
                 </x-nav-link>
-                <x-nav-link href="{{ route('users.schedule-form') }}" class="hover:text-blue-800 transition">
-                    {{ __('Book Schedule') }}
+                <x-nav-link href="{{ route('users.schedule-form') }}" class="text-white hover:text-yellow-300 no-underline hover:no-underline transition">
+                    {{ __('Add Schedule') }}
                 </x-nav-link>
 
                 <!-- Add Record Dropdown -->
                 <x-dropdown align="left" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center text-gray-700 hover:text-blue-800 transition font-medium">
+                        <button class="inline-flex items-center hover:text-yellow-300 transition font-medium">
                             {{ __('Add Record') }}
                             <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-width="2" d="M6 8l4 4 4-4" />
@@ -47,7 +48,7 @@
                 <!-- User Dropdown -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center text-gray-700 hover:text-blue-800 transition font-medium">
+                        <button class="inline-flex items-center hover:text-yellow-300 transition font-medium">
                             {{ Auth::user()->name }}
                             <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414L10 13.414l-4-4a1 1 0 010-1.414z"/>
@@ -73,7 +74,7 @@
 
             <!-- Mobile Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="p-2 rounded-md text-gray-500 hover:bg-gray-100 transition">
+                <button @click="open = ! open" class="p-2 rounded-md text-white hover:bg-red-800 transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
                               stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -88,7 +89,7 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-white text-gray-800 shadow-md p-4">
+    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-red-900 text-white shadow-md p-4">
         <x-responsive-nav-link :href="route('dashboard')">
             {{ __('Dashboard') }}
         </x-responsive-nav-link>
@@ -108,8 +109,8 @@
             {{ __('Confirmation Record') }}
         </x-responsive-nav-link>
         <hr class="my-2 border-gray-200">
-        <div class="text-sm text-gray-700 mb-1">{{ Auth::user()->name }}</div>
-        <div class="text-xs text-gray-500">{{ Auth::user()->email }}</div>
+        <div class="text-sm text-white mb-1">{{ Auth::user()->name }}</div>
+        <div class="text-xs text-gray-300">{{ Auth::user()->email }}</div>
         <x-responsive-nav-link :href="route('profile.edit')">
             {{ __('Profile') }}
         </x-responsive-nav-link>
